@@ -82,6 +82,8 @@ public class SlidingMenu extends RelativeLayout {
 
 	private OnCloseListener mCloseListener;
 
+	private OnSlideListener mOnSlideListener;
+
 	private boolean useHardwareAcceleration = true;
 
 	/**
@@ -168,6 +170,23 @@ public class SlidingMenu extends RelativeLayout {
 		 *            the percent open
 		 */
 		public void transformCanvas(Canvas canvas, float percentOpen);
+	}
+
+	/**
+	 * This listener will observe the slide out offset of the left menu
+	 * 
+	 * @author Hannes Dorfmann
+	 * 
+	 */
+	public interface OnSlideListener {
+
+		/**
+		 * This method is called to inform how wide open the sliding menu is.
+		 * 
+		 * @param offset
+		 *            0.0f means closed (not visible), 1.0f means fully opened
+		 */
+		public void onSlideMenu(float offset);
 	}
 
 	/**
@@ -1018,6 +1037,15 @@ public class SlidingMenu extends RelativeLayout {
 		mViewAbove.setOnClosedListener(listener);
 	}
 
+	/**
+	 * Set the {@link OnSlideListener}
+	 * 
+	 * @param listener
+	 */
+	public void setOnSlideListener(OnSlideListener listener) {
+		this.mOnSlideListener = listener;
+	}
+
 	public static class SavedState extends BaseSavedState {
 
 		private final int mItem;
@@ -1103,6 +1131,10 @@ public class SlidingMenu extends RelativeLayout {
 
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	public void manageLayers(float percentOpen) {
+
+		if (mOnSlideListener != null)
+			mOnSlideListener.onSlideMenu(percentOpen);
+
 		if (Build.VERSION.SDK_INT < 11)
 			return;
 		if (!useHardwareAcceleration)
