@@ -183,10 +183,10 @@ public class SlidingMenu extends RelativeLayout {
 		/**
 		 * This method is called to inform how wide open the sliding menu is.
 		 * 
-		 * @param offset
+		 * @param percentOpen
 		 *            0.0f means closed (not visible), 1.0f means fully opened
 		 */
-		public void onSlideMenu(float offset);
+		public void onSlideMenu(float percentOpen);
 	}
 
 	/**
